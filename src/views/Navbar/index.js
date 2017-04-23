@@ -5,7 +5,7 @@ const Navbar = () => (
   <nav className="nav has-shadow has-text-centered">
     <div className="container">
       <div className="nav-left">
-        <Link to="/" className="nav-item">YT Tutorial Dashboard</Link>
+        <Link to="/" className="nav-item">YTTD</Link>
       </div>
 
       <span className="nav-toggle"
