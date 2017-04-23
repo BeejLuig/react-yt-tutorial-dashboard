@@ -4,9 +4,14 @@
   "private": true,
   "dependencies": {
     "bulma": "^0.4.0",
+    "isomorphic-fetch": "^2.2.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "react-router-dom": "^4.1.1"
+    "react-redux": "^5.0.4",
+    "react-router-dom": "^4.1.1",
+    "redux": "^3.6.0",
+    "redux-form": "^6.6.3",
+    "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
     "react-scripts": "0.9.5"
