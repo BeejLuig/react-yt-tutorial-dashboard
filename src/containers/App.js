@@ -2,28 +2,15 @@ import React, { Component } from 'react';
 import {
   BrowserRouter as Router,
   Route,
-  Switch,
-  Link
+  Switch
 } from 'react-router-dom';
 
-const Navbar = () => (
-  <nav className="nav has-shadow has-text-centered">
-
-    <div className="nav-left">
-      <Link to="/" className="nav-item">YT Tutorial Dashboard</Link>
-    </div>
-
-    <div className="nav-right nav-menu is-active">
-      <Link to="/signup" className="nav-item">Sign up</Link>
-      <Link to="/login" className="nav-item" >Log in</Link>
-    </div>
-  </nav>
-);
-
-const Signup = () => <div>Signup</div>
-const Home = () => <div>Home</div>
-const Login = () => <div>Login</div>
-const NotFound = () => <div>Not Found</div>
+// local imports
+import Home from '../views/Home';
+import Login from '../views/Login';
+import Signup from '../views/Signup';
+import Navbar from '../views/Navbar';
+import NotFound from '../views/NotFound'
 
 class App extends Component {
   render() {
