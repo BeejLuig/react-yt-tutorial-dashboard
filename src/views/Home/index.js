@@ -4,10 +4,16 @@ import { Link } from 'react-router-dom';
 const Home = () => (
   <section className="hero is-primary">
     <div className="hero-body">
-      <h1 className="title">YouTube Tutorial Dashboard</h1>
-      <div className="subtitle">
-        <p>Import your favorite playlists</p>
-        <p>Track your progress</p>
+      <div className="container">
+        <div className="columns is-vcentered">
+          <div className="column">
+            <p className="title">YouTube Tutorial Dashboard</p>
+            <div className="subtitle">
+              <p>Import your favorite playlists</p>
+              <p>Track your progress</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <footer className="hero-footer">
