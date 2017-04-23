@@ -9,13 +9,13 @@ const Signup = () => (
       <br />
       <form>
         <div className="field">
-          <label class="label">Username</label>
+          <label className="label">Username</label>
           <p className="control">
             <input className="input" type="text" placeholder="Username"/>
           </p>
         </div>
         <div className="field">
-          <label class="label">Password</label>
+          <label className="label">Password</label>
           <p className="control">
             <input className="input" type="password" placeholder="Password" />
           </p>
