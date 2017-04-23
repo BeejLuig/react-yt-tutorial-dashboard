@@ -8,13 +8,18 @@ const Navbar = () => (
         <Link to="/" className="nav-item">YT Tutorial Dashboard</Link>
       </div>
 
-      <span className="nav-toggle">
+      <span className="nav-toggle"
+        onClick={(e)=>{
+            e.target.classList.toggle('is-active');
+            document.getElementById("menu").classList.toggle('is-active');
+          }
+        }>
         <span></span>
         <span></span>
         <span></span>
       </span>
 
-      <div className="nav-right nav-menu">
+      <div id="menu" className="nav-right nav-menu">
         <Link to="/signup" className="nav-item">Sign up</Link>
         <Link to="/login" className="nav-item" >Log in</Link>
       </div>
