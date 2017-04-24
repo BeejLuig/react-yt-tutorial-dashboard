@@ -13,7 +13,6 @@ class Home extends Component {
   render() {
 
     const { isAuthenticated } = this.props;
-    console.log(isAuthenticated)
     return (
       <section className="hero is-primary">
         <div className="hero-body">
