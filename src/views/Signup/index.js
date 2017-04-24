@@ -1,45 +1,34 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
+//import local modules
+import { signup } from '../../redux/modules/Auth/actions';
+import SignupForm from './SignupForm';
 
 
 class Signup extends Component {
 
+  static contextTypes = {
+    router: PropTypes.object
+  }
+
+  handleSignup = data => this.props.signup({ user: data }, this.context.router);
+
   render() {
 
-    const { pristine, submitting, handleSubmit } = this.props;
-
     return (
-      <section className="section">
+      <section className="section signup">
         <div className="container">
           <div>
             <h1 className="title">Sign Up</h1>
           </div>
           <br />
-          <form onSubmit={handleSubmit}>
-            <div className="field">
-              <label className="label" htmlFor="username">Username</label>
-              <p className="control">
-                <Field name="username" className="input" component="input" type="text" placeholder="Username"/>
-              </p>
-            </div>
-            <div className="field">
-              <label className="label" htmlFor="password">Password</label>
-              <p className="control">
-                <Field name="password" className="input" component="input" type="password" placeholder="Password" />
-              </p>
-            </div>
-            <div className="field">
-              <p className="control">
-                <button type="submit" className="button is-success" disabled={pristine || submitting}>Sign up</button>
-              </p>
-            </div>
-          </form>
+          <SignupForm onSubmit={this.handleSignup} />
         </div>
       </section>
     )
   }
 }
 
-export default reduxForm({
-  form: 'signup'  // a unique identifier for this form
-})(Signup)
+export default connect(null, { signup })(Signup);
