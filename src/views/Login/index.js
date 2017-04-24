@@ -1,35 +1,40 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { login } from '../../redux/modules/Auth/actions';
+import LoginForm from './LoginForm';
 
-const Login = () => (
-  <section className="section">
-    <div className="container">
-      <div>
-        <h1 className="title">Login</h1>
-      </div>
-      <br />
-      <form>
-        <div className="field">
-          <label className="label">Username</label>
-          <p className="control">
-            <input className="input" type="text" placeholder="Username"/>
-          </p>
-        </div>
-        <div className="field">
-          <label className="label">Password</label>
-          <p className="control">
-            <input className="input" type="password" placeholder="Password" />
-          </p>
-        </div>
-        <div className="field">
-          <p className="control">
-            <button className="button is-success">
-              Login
-            </button>
-          </p>
-        </div>
-      </form>
-    </div>
-  </section>
-)
+type Props = {
+  login: () => void,
+}
 
-export default Login;
+class Login extends Component {
+
+  static contextTypes = {
+    router: PropTypes.object,
+  }
+
+  props: Props
+
+  handleLogin = data => this.props.login({ user: data}, this.context.router);
+
+  render() {
+    return  (
+      <section className="section login_form">
+        <div className="container">
+          <div>
+            <h1 className="title">Login</h1>
+          </div>
+          <br />
+          <LoginForm onSubmit={this.handleLogin} />
+          <br />
+          <p><b>Don't have an account?</b></p>
+          <NavLink to="/signup">Sign up</NavLink>
+        </div>
+      </section>
+    )
+  }
+}
+
+export default connect(null, { login })(Login);
