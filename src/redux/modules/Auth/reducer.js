@@ -1,10 +1,7 @@
 const initialState = {
   isAuthenticated: false,
   isAuthenticating: true,
-  currentUser: {
-    id: "",
-    username: ""
-  }
+  currentUser: {}
 }
 
 export default (state = initialState, action) => {
@@ -13,15 +10,21 @@ export default (state = initialState, action) => {
     case 'AUTHENTICATION_REQUEST':
       return {
         ...state,
-        isAuthenticating: true
-      };
+        isAuthenticating: true,
+      }
 
     case 'AUTHENTICATION_SUCCESS':
       return {
         isAuthenticated: true,
         isAuthenticating: false,
         currentUser: action.user
-      };
+      }
+
+    case 'AUTHENTICATION_FAILURE':
+      return Object.assign({}, initialState, { isAuthenticating: false });
+
+    case 'LOGOUT':
+      return Object.assign({}, initialState, { isAuthenticating: false });
 
     default:
       return state;
