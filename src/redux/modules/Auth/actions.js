@@ -4,6 +4,7 @@ import ApiService from '../../../services/Api';
 /**
  * @param {Auth} creator actions
  */
+
 export const setCurrentUser = (user) => {
   return {
     type: 'AUTHENTICATION_SUCCESS',
@@ -21,8 +22,8 @@ export const logout = (router) => {
   return { type: 'LOGOUT' };
 }
 
-export const authenticationFailure = () => {
-  return { type: 'AUTHENTICATION_FAILURE' };
+export const authenticationFailure = (errors) => {
+  return { type: 'AUTHENTICATION_FAILURE', errors };
 }
 
 /**
@@ -32,7 +33,7 @@ export const authenticationFailure = () => {
 export const signup = (user, router) => {
   return dispatch => {
     dispatch(authenticationRequest());
-    return ApiService.post('/users', user)
+    return ApiService.post(`/users`, user)
       .then(response => {
         const { user, token } = response;
         localStorage.setItem('token', JSON.stringify(token));
@@ -49,7 +50,7 @@ export const signup = (user, router) => {
 export const login = (user, router) => {
   return dispatch => {
     dispatch(authenticationRequest());
-    return ApiService.post('/auth', user)
+    return ApiService.post(`/auth`, user)
       .then(response => {
         const { user, token } = response;
         localStorage.setItem('token', JSON.stringify(token));
@@ -57,8 +58,9 @@ export const login = (user, router) => {
         dispatch(reset('login'));
         router.history.replace('/dashboard');
       })
-      .catch((err) => {
-        throw new SubmissionError(err)
+      .catch((errors) => {
+        console.log(errors)
+        dispatch(authenticationFailure(errors))
       })
   }
 }
@@ -66,7 +68,7 @@ export const login = (user, router) => {
 export const authenticate = () => {
   return dispatch => {
     dispatch(authenticationRequest());
-    return ApiService.post('/auth/refresh')
+    return ApiService.post(`/auth/refresh`)
       .then(response => {
         const { user, token } = response;
         localStorage.setItem('token', JSON.stringify(token));

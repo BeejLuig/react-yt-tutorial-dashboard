@@ -16,7 +16,6 @@ export const parseResponse = (response) => {
   return response.json()
     .then(json => {
       if (!response.ok) {
-        console.log(json.errors)
         return Promise.reject(json.errors);
       }
 
