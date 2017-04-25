@@ -15,14 +15,19 @@ import NotFound from '../views/NotFound';
 import Dashboard from '../views/Dashboard/';
 import MatchAuthenticated from '../components/MatchAuthenticated/';
 import RedirectUnauthenticated from '../components/RedirectUnauthenticated/';
+import Errors from '../components/Errors';
 import { authenticate, authenticationFailure, logout } from '../redux/modules/Auth/actions';
+
+// GET_URL=https://www.googleapis.com/youtube/v3/playlistItems
+
 
 type Props = {
   isAuthenticating: boolean,
   isAuthenticated: boolean,
   logout: () => void,
   authenticate: () => void,
-  authenticationFailure: () => void
+  authenticationFailure: () => void,
+  errors: [],
 }
 
 class App extends Component {
@@ -40,14 +45,14 @@ class App extends Component {
   }
 
   render() {
-
-    const { isAuthenticated, isAuthenticating, currentUser, logout } = this.props;
+    const { isAuthenticated, isAuthenticating, currentUser, logout, errors } = this.props;
     const authProps = { isAuthenticated, isAuthenticating, currentUser };
 
     return (
       <Router>
         <div className="App">
         <Navbar isAuthenticated={isAuthenticated}  logout={logout} />
+      { !!errors ? <Errors errors={errors} /> : null }
           <Switch>
             <Route exact path="/" component={Home} />
             <MatchAuthenticated path="/dashboard" exact component={Dashboard} {...authProps} />
@@ -65,6 +70,7 @@ export default connect(
   state => ({
     isAuthenticating: state.auth.isAuthenticating,
     isAuthenticated: state.auth.isAuthenticated,
-    currentUser: state.auth.currentUser
+    currentUser: state.auth.currentUser,
+    errors: state.auth.errors
   }), { logout, authenticate, authenticationFailure }
 )(App);
