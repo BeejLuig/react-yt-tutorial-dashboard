@@ -14,7 +14,7 @@ class Home extends Component {
 
     const { isAuthenticated } = this.props;
     return (
-      <section className="hero is-primary">
+      <section className="hero is-primary is-bold">
         <div className="hero-body">
           <div className="container">
             <div className="columns is-vcentered">
