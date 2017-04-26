@@ -1,0 +1,13 @@
+.hero {
+  height: calc(100vh - 52px);
+  overflow: hidden;
+}
+
+#call-to-action:hover {
+  background-color: rgba(3, 3, 3, 0.33);
+  color: white;
+}
+
+#call-to-action {
+  transition: all 0.3s;
+}

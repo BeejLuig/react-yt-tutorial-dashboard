@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import './home.css';
 
 type Props = {
   isAuthenticated: boolean,
@@ -14,7 +15,7 @@ class Home extends Component {
 
     const { isAuthenticated } = this.props;
     return (
-      <section className="hero is-primary is-bold">
+      <section id="hero" className="hero is-primary is-bold">
         <div className="hero-body">
           <div className="container">
             <div className="columns is-vcentered">
@@ -24,20 +25,13 @@ class Home extends Component {
                   <p>Import your favorite playlists</p>
                   <p>Track your progress</p>
                 </div>
+                <p>
+                  <Link to={isAuthenticated ? "/dashboard" : "/signup"} id="call-to-action" className="button is-success is-inverted is-medium is-outlined">Get Started</Link>
+                </p>
               </div>
             </div>
           </div>
         </div>
-        <footer className="hero-footer">
-          <div className="container">
-            <div className="content has-text-centered">
-              <p>
-                <Link to={isAuthenticated ? "/dashboard" : "/signup"} className="button is-success is-inverted is-medium is-outlined">Get Started</Link>
-              </p>
-              <br />
-            </div>
-          </div>
-        </footer>
       </section>
     )
   }
