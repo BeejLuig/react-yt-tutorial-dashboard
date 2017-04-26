@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getPlaylists } from '../../services/YoutubeService.js';
-import PlaylistPanel from '../PlaylistPanel';
+import AddPlaylistInput from '../AddPlaylistInput';
 import Card from '../Card/';
 import './dashboard.css';
 
@@ -16,9 +16,10 @@ class Dashboard extends Component {
 
     this.state = {
       playlists: [],
-      selectedPlaylistTitle: "",
-      selectedPlaylistDescription: "",
-      modal: "modal"
+      newPlaylistTitle: "",
+      newPlaylistDescription: "",
+      modal: "modal",
+      value: ""
     }
   }
 
@@ -26,32 +27,49 @@ class Dashboard extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
+
     const value = document.getElementById("url_input").value;
-    getPlaylists(value).then(e => {
+
+    getPlaylists(this.parseIdFromUrl(value)).then(e => {
       if(e.errors) {
-        console.log(e.errors)
-      } else {
+        console.log(e.errors);
         this.setState({
-          playlists: e.items.map(item => item)
-        });
+          selectedPlaylistTitle: "Error",
+          selectedPlaylistDescription: e.errors.join("\n") + "Please try again!",
+          modal: "modal is-active",
+          value: ""
+        })
+      } else {
+        const playlist = e.items[0];
+        this.setState({
+          selectedPlaylistTitle: playlist.snippet.title,
+          selectedPlaylistDescription: playlist.snippet.description,
+          modal: "modal is-active",
+          value: ""
+        })
       }
     })
   }
 
-
-  handleClick(e) {
-    if (e.target.id === "modal-close") {
-      this.setState({
-        modal: "modal"
-      })
+  parseIdFromUrl(input) {
+    const str = input.match(/(?:list=).*(?=&)|(?=list=).*/);
+    if(str) {
+      return str[0].split("=")[1]
     } else {
-      const playlist = this.state.playlists.find(p => p.id === e.target.id).snippet;
-      this.setState({
-        selectedPlaylistTitle: playlist.title,
-        selectedPlaylistDescription: playlist.description,
-        modal: "modal is-active",
-      });
+      return input
     }
+  }
+
+  handleChange(e) {
+    this.setState({
+      value: e.target.value
+    })
+  }
+
+  handleCloseModal(e) {
+    this.setState({
+      modal: "modal"
+    })
   }
 
   render() {
@@ -62,11 +80,6 @@ class Dashboard extends Component {
           <div className="columns">
             <div className="column is-half is-offset-one-quarter">
               <p className="title is-large">Welcome, <b>{currentUser.username}</b>!</p>
-              <PlaylistPanel
-                onSubmit={this.handleSubmit.bind(this)}
-                onClick={this.handleClick.bind(this)}
-                playlists={this.state.playlists}
-              />
             </div>
           </div>
         </div>
@@ -74,7 +87,13 @@ class Dashboard extends Component {
         <div className="container is-fluid" id="playlist_title_container">
           <div className="columns">
             <div className="column is-half is-offset-one-quarter has-text-centered">
-              <p className="title is-medium notification is-bold">My Playlists</p>
+              <p className="title is-medium notification is-primary">My Playlists</p>
+              <AddPlaylistInput
+                onSubmit={this.handleSubmit.bind(this)}
+                playlists={this.state.playlists}
+                value={this.state.value}
+                onChange={this.handleChange.bind(this)}
+              />
             </div>
           </div>
         </div>
@@ -90,8 +109,12 @@ class Dashboard extends Component {
             <div id="modal-content" className="modal-content">
               <p><b>{this.state.selectedPlaylistTitle}</b></p>
               <p>{(!!this.state.selectedPlaylistDescription) ? this.state.selectedPlaylistDescription : "No description provided"}</p>
+              <p>
+                <a className="button is-success modal-button">Add</a>
+                <a className="button modal-button" onClick={this.handleCloseModal.bind(this)}>Cancel</a>
+              </p>
             </div>
-          <button id="modal-close" className="modal-close" onClick={this.handleClick.bind(this)}></button>
+          <button id="modal-close" className="modal-close" onClick={this.handleCloseModal.bind(this)}></button>
         </div>
       </section>
     )
