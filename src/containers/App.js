@@ -17,7 +17,6 @@ import MatchAuthenticated from '../components/MatchAuthenticated/';
 import RedirectUnauthenticated from '../components/RedirectUnauthenticated/';
 import Errors from '../components/Errors';
 import { authenticate, authenticationFailure, logout } from '../redux/modules/Auth/actions';
-
 // GET_URL=https://www.googleapis.com/youtube/v3/playlistItems
 
 

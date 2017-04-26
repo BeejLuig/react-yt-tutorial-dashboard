@@ -42,7 +42,7 @@ export function getPlaylists(playlistId) {
   return fetch(requestUrl, init)
     .then(resp => resp.json()
       .then(json => {
-        return json.items.length > 0 ? json : { errors: ["no playlist found with the given url/id"] }
+        return json.items.length > 0 ? json : { errors: ["No playlist found with the given url/id"] }
       })
   ).catch(err => {
     console.log(err)
