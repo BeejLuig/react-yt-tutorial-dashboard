@@ -3,3 +3,9 @@
   border-radius: 15px;
   padding: 20px;
 }
+
+@media screen and (min-width: 1000px) {
+#playlist_title_container {
+    margin: 0;
+  }
+}

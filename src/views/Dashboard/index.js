@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getPlaylists } from '../../services/YoutubeService.js';
 import PlaylistPanel from '../PlaylistPanel';
+import Card from '../Card/';
 import './dashboard.css';
 
 type Props = {
@@ -27,11 +28,16 @@ class Dashboard extends Component {
     e.preventDefault();
     const value = document.getElementById("url_input").value;
     getPlaylists(value).then(e => {
-      this.setState({
-        playlists: e.items.map(item => item)
-      });
+      if(e.errors) {
+        console.log(e.errors)
+      } else {
+        this.setState({
+          playlists: e.items.map(item => item)
+        });
+      }
     })
   }
+
 
   handleClick(e) {
     if (e.target.id === "modal-close") {
@@ -40,7 +46,6 @@ class Dashboard extends Component {
       })
     } else {
       const playlist = this.state.playlists.find(p => p.id === e.target.id).snippet;
-      console.log(playlist)
       this.setState({
         selectedPlaylistTitle: playlist.title,
         selectedPlaylistDescription: playlist.description,
@@ -51,7 +56,6 @@ class Dashboard extends Component {
 
   render() {
     const { currentUser } = this.props;
-    console.log(this.state);
     return (
       <section className="section dashboard">
         <div className="container">
@@ -66,6 +70,20 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
+
+        <div className="container is-fluid" id="playlist_title_container">
+          <div className="columns">
+            <div className="column is-half is-offset-one-quarter has-text-centered">
+              <p className="title is-medium notification is-bold">My Playlists</p>
+            </div>
+          </div>
+        </div>
+
+        <Card />
+        <Card />
+        <Card />
+        <Card />
+        <Card />
 
         <div className={this.state.modal}>
           <div className="modal-background"></div>
