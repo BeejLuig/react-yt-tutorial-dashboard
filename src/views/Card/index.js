@@ -10,15 +10,15 @@ export default function Card(props) {
   const toggleHide = (e) => {
     const card = findCard(e.target);
     if(card.dataset.toggle === "closed") {
-      card.dataset.toggle = "open"
-      card.childNodes[0].childNodes[1].style.transition = "all 0.3s"
-      card.children[1].className = "card-content";
-      card.children[2].className = "card-content";
+      card.dataset.toggle = "open";
+      console.log(card.children[1])
+      card.children[1].style.padding = "1.25rem";
+      card.children[1].style.maxHeight = card.children[1].scrollHeight + "px";
       card.childNodes[0].childNodes[1].style.transform = "rotate(180deg)";
     } else {
       card.dataset.toggle = "closed"
-      card.children[1].className = "card-content hidden";
-      card.children[2].className = "card-content hidden";
+      card.children[1].style.padding = null;
+      card.children[1].style.maxHeight = null;
       card.childNodes[0].childNodes[1].style.transform = "";
     }
   }
@@ -30,7 +30,7 @@ export default function Card(props) {
 
           <a className="card-header" onClick={toggleHide}>
             <p className="card-header-title">
-              Component
+              Video
             </p>
             <span className="card-header-icon">
               <span className="icon">
@@ -38,20 +38,18 @@ export default function Card(props) {
               </span>
             </span>
           </a>
-          <div className="card-content hidden">
+          <div className="card-content">
             <div className="media">
               <div className="media-left">
-                <figure className="image is-48x48">
-                  <img src="http://bulma.io/images/placeholders/96x96.png" alt="size" />
-                </figure>
+              <figure className="image is-48x48">
+                <img src="http://bulma.io/images/placeholders/96x96.png" alt="pic" />
+              </figure>
               </div>
               <div className="media-content">
                 <p className="title is-4">John Smith</p>
                 <p className="subtitle is-6">@johnsmith</p>
               </div>
             </div>
-          </div>
-          <div className="card-content hidden">
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.</p>
             <a>@bulmaio</a>. <a>#css</a> <a>#responsive</a>
             <br />
