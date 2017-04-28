@@ -1,0 +1,11 @@
+.modal-image {
+  max-width: 300px;
+}
+
+.modal-button:not(:first-child) {
+  margin-left: 10px;
+}
+
+.hidden {
+  display: none
+}
