@@ -55,6 +55,7 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={Home} />
             <MatchAuthenticated path="/dashboard" exact component={Dashboard} {...authProps} />
+            <MatchAuthenticated path="/playlists" exact component={Dashboard} {...authProps} />
             <RedirectUnauthenticated exact path="/login" component={Login} {...authProps} />
             <RedirectUnauthenticated exact path="/signup" component={Signup} {...authProps} />
             <Route component={NotFound} />
