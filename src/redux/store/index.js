@@ -6,11 +6,13 @@ import {
 import thunk from 'redux-thunk';
 import { reducer as form } from 'redux-form';
 import auth from '../modules/Auth/reducer';
+import playlists from '../modules/Playlists/reducer';
 
 
 const reducers = combineReducers({
   form,
   auth,
+  playlists
 });
 
 const middleware = [thunk];

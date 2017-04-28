@@ -1,63 +1,71 @@
 const initialState = {
-  playlists: [
-    {
-      title: "",
-      playlist_id: "",
-      description: "",
-      thumbnail_url: "",
-      user_id: ""
-    }
-  ]
+  isRequesting: false,
+  playlists: []
 }
+
+//playlist: {
+//   title: "",
+//   playlist_id: "",
+//   description: "",
+//   thumbnail_url: "",
+//   user_id: "",
+//   videos: [
+//     {
+//       title: "",
+//       video_id: "",
+//       description: "",
+//       thumbnail_url: ""
+//     }
+//   ]
+// }
 
 export default (state = initialState, action) => {
   switch(action.type) {
 
-    case 'USER_PLAYLISTS_REQUEST':
-      return {}
+    case 'PLAYLISTS_REQUEST':
+      return {
+        ...state,
+        isRequesting: true
+      }
 
     case 'USER_PLAYLISTS_SUCCESS':
-      return {}
-
-    case 'USER_PLAYLISTS_FAILURE':
-      return {};
-
-    case 'PLAYLIST_REQUEST':
-      return {}
-
-    case 'PLAYLIST_SUCCESS':
-      return {}
-
-    case 'PLAYLIST_FAILURE':
-      return {};
-
-    case 'ADD_PLAYLIST_REQUEST':
-      return {}
+      return {
+        isRequesting: false,
+        playlists: action.playlists
+      }
 
     case 'ADD_PLAYLIST_SUCCESS':
-      return {}
-
-    case 'ADD_PLAYLIST_FAILURE':
-      return {};
-
-    case 'DELETE_PLAYLIST_REQUEST':
-      return {}
-
-    case 'DELETE_PLAYLIST_SUCCESS':
-      return {}
-
-    case 'DELETE_PLAYLIST_FAILURE':
-      return {};
-
-    case 'REFRESH_PLAYLIST_REQUEST':
-      return {}
+      return {
+        isRequesting: false,
+        playlists: [...state.playlists, action.playlist]
+      }
 
     case 'REFRESH_PLAYLIST_SUCCESS':
-      return {}
+      const index = state.playlists.indexOf(action.playlist)
+      return {
+        isRequesting: false,
+        playlists: [
+            ...state.playlists.slice(0, index),
+            action.playlist,
+            ...state.playlists.slice(index + 1)
+          ]
+      }
 
-    case 'REFRESH_PLAYLIST_FAILURE':
-      return {};
+    case 'DELETE_PLAYLIST_SUCCESS':
+      const deleteIndex = state.playlists.indexOf(action.playlist)
+      return {
+        isRequesting: false,
+        playlists: [
+          ...state.playlists.slice(0, deleteIndex),
+          ...state.playlists.slice(deleteIndex + 1)
+        ]
+      }
 
+    case 'REQUEST_FAILURE':
+      return {
+        isRequesting: false,
+        errors: action.errors
+      }
 
     default:
       return state;
