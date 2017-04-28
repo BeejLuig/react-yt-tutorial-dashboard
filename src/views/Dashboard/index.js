@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getPlaylists } from '../../services/YoutubeService.js';
+import { createPlaylist } from '../../redux/modules/Playlists/actions';
 import AddPlaylistInput from '../AddPlaylistInput';
 import Card from '../Card/';
+import PlaylistModal from '../PlaylistModal/';
 import './dashboard.css';
 
 type Props = {
@@ -15,10 +16,10 @@ class Dashboard extends Component {
     super(props);
 
     this.state = {
-      playlists: [],
-      newPlaylistTitle: "",
-      newPlaylistDescription: "",
+      playlist: {},
+      playlistVideos: [],
       modal: "modal",
+      modalIsOpen: false,
       value: ""
     }
   }
@@ -27,28 +28,10 @@ class Dashboard extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-
     const value = document.getElementById("url_input").value;
+    const id = this.parseIdFromUrl(value)
 
-    getPlaylists(this.parseIdFromUrl(value)).then(e => {
-      if(e.errors) {
-        console.log(e.errors);
-        this.setState({
-          selectedPlaylistTitle: "Error",
-          selectedPlaylistDescription: e.errors.join("\n") + "Please try again!",
-          modal: "modal is-active",
-          value: ""
-        })
-      } else {
-        const playlist = e.items[0];
-        this.setState({
-          selectedPlaylistTitle: playlist.snippet.title,
-          selectedPlaylistDescription: playlist.snippet.description,
-          modal: "modal is-active",
-          value: ""
-        })
-      }
-    })
+    this.props.createPlaylist(id);
   }
 
   parseIdFromUrl(input) {
@@ -74,8 +57,12 @@ class Dashboard extends Component {
 
   render() {
     const { currentUser } = this.props;
+    const { playlist, playlistVideos, modal, modalIsOpen, errors, value } = this.state;
+    const { handleCloseModal } = this;
+
     return (
       <section className="section dashboard">
+
         <div className="container">
           <div className="columns">
             <div className="column is-half is-offset-one-quarter">
@@ -90,10 +77,11 @@ class Dashboard extends Component {
               <p className="title is-medium notification is-primary">My Playlists</p>
               <AddPlaylistInput
                 onSubmit={this.handleSubmit.bind(this)}
-                playlists={this.state.playlists}
-                value={this.state.value}
+                playlist={playlist}
+                value={value}
                 onChange={this.handleChange.bind(this)}
               />
+              <p className="is-danger">{ !!errors ? errors.join(". ") + ". Try again!" : null}</p>
             </div>
           </div>
         </div>
@@ -104,18 +92,19 @@ class Dashboard extends Component {
         <Card />
         <Card />
 
-        <div className={this.state.modal}>
-          <div className="modal-background"></div>
-            <div id="modal-content" className="modal-content">
-              <p><b>{this.state.selectedPlaylistTitle}</b></p>
-              <p>{(!!this.state.selectedPlaylistDescription) ? this.state.selectedPlaylistDescription : "No description provided"}</p>
-              <p>
-                <a className="button is-success modal-button">Add</a>
-                <a className="button modal-button" onClick={this.handleCloseModal.bind(this)}>Cancel</a>
-              </p>
-            </div>
-          <button id="modal-close" className="modal-close" onClick={this.handleCloseModal.bind(this)}></button>
-        </div>
+        { modalIsOpen ?
+
+          <PlaylistModal
+            playlist={playlist}
+            videos={playlistVideos}
+            modal={modal}
+            onClick={handleCloseModal.bind(this)}
+          />
+
+          :
+
+          null
+        }
       </section>
     )
   }
@@ -123,6 +112,7 @@ class Dashboard extends Component {
 
 export default connect(state => {
   return {
-    currentUser: state.auth.currentUser
+    currentUser: state.auth.currentUser,
+    playlists: state.playlists
   }
-})(Dashboard);
+}, { createPlaylist })(Dashboard);

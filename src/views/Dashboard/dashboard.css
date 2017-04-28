@@ -14,10 +14,6 @@
   background-color: #fefefe;
 }
 
-.modal-button:not(:first-child) {
-  margin-left: 10px;
-}
-
-.modal-button {
-  margin-top: 10px;
+.is-danger {
+  color: #ff3860;
 }
