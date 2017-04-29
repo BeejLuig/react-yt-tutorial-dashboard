@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { createPlaylist } from '../../redux/modules/Playlists/actions';
+import { addUserPlaylist, getUserPlaylists, deleteUserPlaylists } from '../../redux/modules/Playlists/actions';
+import { getPlaylists } from '../../services/YoutubeService'
 import AddPlaylistInput from '../AddPlaylistInput';
 import Card from '../Card/';
 import PlaylistModal from '../PlaylistModal/';
+import EditModal from '../CardModals/EditModal';
 import './dashboard.css';
 
 type Props = {
@@ -16,11 +18,11 @@ class Dashboard extends Component {
     super(props);
 
     this.state = {
-      playlist: {},
-      playlistVideos: [],
-      modal: "modal",
-      modalIsOpen: false,
-      value: ""
+      playlistModalIsOpen: false,
+      editModalIsOpen: false,
+      value: "",
+      selectedPlaylist: {},
+      errors: []
     }
   }
 
@@ -28,10 +30,46 @@ class Dashboard extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    this.setState({
+      errors: [],
+      value: ""
+    });
+
     const value = document.getElementById("url_input").value;
     const id = this.parseIdFromUrl(value)
 
-    this.props.createPlaylist(id);
+    getPlaylists(id).then(resp => {
+      const playlist = resp.items[0];
+      const { id } = playlist
+      const { title, description, channelTitle } = playlist.snippet
+      const { standard, high, medium } = playlist.snippet.thumbnails
+      const selectedPlaylist = {
+        id,
+        title,
+        description,
+        channelTitle,
+        thumbnailUrl: standard.url || high.url || medium.url || playlist.thumbnails.standard.url
+      }
+
+      this.setState({
+        playlistModalIsOpen: true,
+        selectedPlaylist
+      });
+
+    }).catch(errors => {
+      console.log(errors)
+      this.setState({
+        errors: ["No playlist found with the given id"]
+      });
+    })
+  }
+
+  handleAddUserPlaylist(e) {
+    this.setState({
+      playlistModalIsOpen: false,
+      editModalIsOpen: false
+    })
+    this.props.addUserPlaylist(e.target.id);
   }
 
   parseIdFromUrl(input) {
@@ -49,17 +87,41 @@ class Dashboard extends Component {
     })
   }
 
+  handleDelete() {
+    this.props.deleteUserPlaylists(this.state.selectedPlaylist.id)
+    this.setState({
+      playlistModalIsOpen: false,
+      editModalIsOpen: false
+    })
+  }
+
   handleCloseModal(e) {
     this.setState({
-      modal: "modal"
+      playlistModalIsOpen: false,
+      editModalIsOpen: false
     })
+  }
+
+  handleCardButtonClick(e) {
+    const target = e.target.innerText;
+    if(target === "Edit") {
+      const selectedPlaylist = this.props.playlists.playlists.find(p => p.id === parseInt(e.target.id, 10))
+      this.setState({
+        editModalIsOpen: true,
+        selectedPlaylist
+      });
+    }
+  }
+
+  componentDidMount() {
+    this.props.getUserPlaylists();
   }
 
   render() {
     const { currentUser } = this.props;
-    const { playlist, playlistVideos, modal, modalIsOpen, errors, value } = this.state;
-    const { handleCloseModal } = this;
-
+    const { playlists, isRequesting } = this.props.playlists
+    const { playlistModalIsOpen, editModalIsOpen, value, selectedPlaylist, errors } = this.state;
+    const { handleCloseModal, handleAddUserPlaylist, handleCardButtonClick, handleDelete } = this;
     return (
       <section className="section dashboard">
 
@@ -77,28 +139,48 @@ class Dashboard extends Component {
               <p className="title is-medium notification is-primary">My Playlists</p>
               <AddPlaylistInput
                 onSubmit={this.handleSubmit.bind(this)}
-                playlist={playlist}
                 value={value}
                 onChange={this.handleChange.bind(this)}
               />
-              <p className="is-danger">{ !!errors ? errors.join(". ") + ". Try again!" : null}</p>
+              <p className="is-danger">{ errors.length > 0 ? errors.join(". ") + ". Try again!" : null}</p>
             </div>
           </div>
         </div>
 
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        { playlists.length > 0 ? playlists.map(playlist => (
+          <Card
+            key={playlist.id}
+            playlist={playlist}
+            onClick={handleCardButtonClick.bind(this)}
+          />)) : (
+            <div className="columns">
+              <div className="column is-half is-offset-one-quarter">
+                <div className="notification is-info has-text-centered">
+                  { isRequesting ? "Loading..." : "You have no playlists. Add some!" }
+                </div>
+              </div>
+            </div>
+          )
+        }
 
-        { modalIsOpen ?
+        { playlistModalIsOpen ?
 
           <PlaylistModal
-            playlist={playlist}
-            videos={playlistVideos}
-            modal={modal}
+            playlist={selectedPlaylist}
             onClick={handleCloseModal.bind(this)}
+            handleAddUserPlaylist={handleAddUserPlaylist.bind(this)}
+          />
+
+          :
+
+          null
+        }
+        { editModalIsOpen ?
+
+          <EditModal
+            onClick={handleCloseModal.bind(this)}
+            playlist={selectedPlaylist}
+            handleDelete={handleDelete.bind(this)}
           />
 
           :
@@ -115,4 +197,4 @@ export default connect(state => {
     currentUser: state.auth.currentUser,
     playlists: state.playlists
   }
-}, { createPlaylist })(Dashboard);
+}, { addUserPlaylist, getUserPlaylists, deleteUserPlaylists })(Dashboard);
