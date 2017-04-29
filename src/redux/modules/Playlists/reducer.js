@@ -3,22 +3,6 @@ const initialState = {
   playlists: []
 }
 
-//playlist: {
-//   title: "",
-//   playlist_id: "",
-//   description: "",
-//   thumbnail_url: "",
-//   user_id: "",
-//   videos: [
-//     {
-//       title: "",
-//       video_id: "",
-//       description: "",
-//       thumbnail_url: ""
-//     }
-//   ]
-// }
-
 export default (state = initialState, action) => {
   switch(action.type) {
 
@@ -52,7 +36,7 @@ export default (state = initialState, action) => {
       }
 
     case 'DELETE_PLAYLIST_SUCCESS':
-      const deleteIndex = state.playlists.indexOf(action.playlist)
+      const deleteIndex = state.playlists.findIndex(playlist => playlist.id === action.playlistId)
       return {
         isRequesting: false,
         playlists: [
