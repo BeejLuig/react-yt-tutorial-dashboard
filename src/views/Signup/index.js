@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { NavLink } from 'react-router-dom';
 
 //import local modules
 import { signup } from '../../redux/modules/Auth/actions';
@@ -26,6 +27,9 @@ class Signup extends Component {
           <br />
           <SignupForm onSubmit={this.handleSignup} />
         </div>
+        <br />
+        <p><b>Already have an account?</b></p>
+        <NavLink to="/login">Log in</NavLink>
       </section>
     )
   }
