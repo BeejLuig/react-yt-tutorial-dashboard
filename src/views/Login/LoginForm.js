@@ -78,7 +78,6 @@ class LoginForm extends Component {
         password: e.target.value
       })
     }
-    console.log(this.state.errors)
   }
 
   handleBlur(e) {
