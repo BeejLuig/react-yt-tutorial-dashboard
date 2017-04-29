@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import './card.css';
 
 export default function Card(props) {
@@ -11,9 +12,8 @@ export default function Card(props) {
     const card = findCard(e.target);
     if(card.dataset.toggle === "closed") {
       card.dataset.toggle = "open";
-      console.log(card.children[1])
       card.children[1].style.padding = "1.25rem";
-      card.children[1].style.maxHeight = card.children[1].scrollHeight + "px";
+      card.children[1].style.maxHeight = card.children[1].scrollHeight + card.children[1].scrollHeight + "px";
       card.childNodes[0].childNodes[1].style.transform = "rotate(180deg)";
     } else {
       card.dataset.toggle = "closed"
@@ -23,6 +23,9 @@ export default function Card(props) {
     }
   }
 
+  const { title, thumbnail_url, channel_title, description, total_videos, completed_videos, id } = props.playlist;
+  const { onClick } = props;
+
   return (
     <div className="columns">
       <div className="column is-half is-offset-one-quarter">
@@ -30,7 +33,7 @@ export default function Card(props) {
 
           <a className="card-header" onClick={toggleHide}>
             <p className="card-header-title">
-              Video
+              {title}
             </p>
             <span className="card-header-icon">
               <span className="icon">
@@ -41,24 +44,21 @@ export default function Card(props) {
           <div className="card-content">
             <div className="media">
               <div className="media-left">
-              <figure className="image is-48x48">
-                <img src="http://bulma.io/images/placeholders/96x96.png" alt="pic" />
+              <figure className="image is-96x96">
+                <img src={thumbnail_url} alt="pic" />
               </figure>
               </div>
               <div className="media-content">
-                <p className="title is-4">John Smith</p>
-                <p className="subtitle is-6">@johnsmith</p>
+                <p className="title is-4">From the <br /><b>{channel_title}</b> channel</p>
+                <p className="subtitle view-progress">{completed_videos}/{total_videos} Complete</p>
               </div>
             </div>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.</p>
-            <a>@bulmaio</a>. <a>#css</a> <a>#responsive</a>
-            <br />
-            <small>11:09 PM - 1 Jan 2016</small>
+            <p>{!!description ? description : "No description available"}</p>
           </div>
           <footer className="card-footer">
-            <a className="card-footer-item">Watch</a>
+            <NavLink to="/watch" className="card-footer-item">Watch</NavLink>
             <a className="card-footer-item">Stats</a>
-            <a className="card-footer-item">Edit</a>
+            <a className="card-footer-item" id={id} onClick={onClick}>Edit</a>
           </footer>
         </div>
       </div>

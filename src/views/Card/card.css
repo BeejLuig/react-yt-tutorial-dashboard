@@ -5,3 +5,7 @@
   overflow: hidden;
   transition: all 0.2s ease-out;
 }
+
+.media-content .card-progress {
+  color: #00d1b2;
+}
