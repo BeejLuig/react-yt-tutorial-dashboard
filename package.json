@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://intense-plains-72706.herokuapp.com/api/v1",
+  "proxy": "http://localhost:3001/api/v1/",
   "dependencies": {
     "bulma": "^0.4.0",
     "history": "^4.6.1",
@@ -12,6 +12,7 @@
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.4",
     "react-router-dom": "^4.1.1",
+    "react-youtube": "^7.4.0",
     "redux": "^3.6.0",
     "redux-form": "^6.6.3",
     "redux-thunk": "^2.2.0"
