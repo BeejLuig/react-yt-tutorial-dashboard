@@ -12,12 +12,12 @@ import Login from '../views/Login';
 import Signup from '../views/Signup';
 import Navbar from '../views/Navbar';
 import NotFound from '../views/NotFound';
-import Dashboard from '../views/Dashboard/';
+import Dashboard from './Dashboard/';
+import VideoContainer from './VideoContainer'
 import MatchAuthenticated from '../components/MatchAuthenticated/';
 import RedirectUnauthenticated from '../components/RedirectUnauthenticated/';
 import Errors from '../components/Errors';
 import { authenticate, authenticationFailure, logout } from '../redux/modules/Auth/actions';
-// GET_URL=https://www.googleapis.com/youtube/v3/playlistItems
 
 
 type Props = {
@@ -56,6 +56,7 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <MatchAuthenticated path="/dashboard" exact component={Dashboard} {...authProps} />
             <MatchAuthenticated path="/playlists" exact component={Dashboard} {...authProps} />
+            <MatchAuthenticated path="/watch" exact component={VideoContainer} {...authProps} />
             <RedirectUnauthenticated exact path="/login" component={Login} {...authProps} />
             <RedirectUnauthenticated exact path="/signup" component={Signup} {...authProps} />
             <Route component={NotFound} />
