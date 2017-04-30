@@ -1,5 +1,4 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import './card.css';
 
 export default function Card(props) {
@@ -55,10 +54,10 @@ export default function Card(props) {
             </div>
             <p>{!!description ? description : "No description available"}</p>
           </div>
-          <footer className="card-footer">
-            <NavLink to="/watch" className="card-footer-item">Watch</NavLink>
-            <a className="card-footer-item">Stats</a>
-            <a className="card-footer-item" id={id} onClick={onClick}>Edit</a>
+          <footer className="card-footer" id={id}>
+            <a onClick={onClick} className="card-footer-item">Watch</a>
+            <a className="card-footer-item" onClick={onClick}>Stats</a>
+            <a className="card-footer-item" onClick={onClick}>Edit</a>
           </footer>
         </div>
       </div>
