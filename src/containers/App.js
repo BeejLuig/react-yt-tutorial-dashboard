@@ -14,8 +14,10 @@ import Navbar from '../views/Navbar';
 import NotFound from '../views/NotFound';
 import Dashboard from './Dashboard/';
 import VideoContainer from './VideoContainer'
+import Video from '../views/Video';
 import MatchAuthenticated from '../components/MatchAuthenticated/';
 import RedirectUnauthenticated from '../components/RedirectUnauthenticated/';
+import NestedMatchAuthenticated from '../components/NestedMatchAuthenticated/';
 import Errors from '../components/Errors';
 import { authenticate, authenticationFailure, logout } from '../redux/modules/Auth/actions';
 
@@ -55,8 +57,10 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={Home} />
             <MatchAuthenticated path="/dashboard" exact component={Dashboard} {...authProps} />
-            <MatchAuthenticated path="/playlists" exact component={Dashboard} {...authProps} />
-            <MatchAuthenticated path="/watch" exact component={VideoContainer} {...authProps} />
+            <MatchAuthenticated path="/playlists" component={Dashboard} {...authProps} />
+            <NestedMatchAuthenticated path="/watch" component={VideoContainer}{...authProps} >
+              <Route path="/watch/:id" component={Video} />
+            </NestedMatchAuthenticated>
             <RedirectUnauthenticated exact path="/login" component={Login} {...authProps} />
             <RedirectUnauthenticated exact path="/signup" component={Signup} {...authProps} />
             <Route component={NotFound} />
