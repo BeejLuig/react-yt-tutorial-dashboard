@@ -22,6 +22,10 @@ The API project uses [PostgreSQL](https://www.postgresql.org/) for a database. I
 - To enable the database, cd into the root directory and run `rake db:create && rake db:migrate`.
 - To start the servers, run `rake start`.
 
+
+--- 
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
