@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addUserPlaylist, getUserPlaylists, deleteUserPlaylists } from '../../redux/modules/Playlists/actions';
-import { getPlaylists } from '../../services/YoutubeService'
+import { addUserPlaylist, getUserPlaylists, deleteUserPlaylists, refreshUserPlaylist } from '../../redux/modules/Playlists/actions';
+import { getPlaylistVideos, resetCompletedVideos } from '../../redux/modules/Videos/actions';
+import { getPlaylists } from '../../services/YoutubeService';
 import AddPlaylistInput from '../../views/AddPlaylistInput';
 import Card from '../../views/Card/';
 import PlaylistModal from '../../views/PlaylistModal/';
 import EditModal from '../../views/CardModals/EditModal';
+import StatsModal from '../../views/CardModals/StatsModal';
 import './dashboard.css';
 
 type Props = {
@@ -14,12 +17,17 @@ type Props = {
 
 class Dashboard extends Component {
 
+  static contextTypes = {
+    router: PropTypes.object,
+  }
+
   constructor(props) {
     super(props);
 
     this.state = {
       playlistModalIsOpen: false,
       editModalIsOpen: false,
+      statsModalIsOpen: false,
       value: "",
       selectedPlaylist: {},
       errors: []
@@ -34,6 +42,7 @@ class Dashboard extends Component {
       errors: [],
       value: ""
     });
+
 
     const value = document.getElementById("url_input").value;
     const id = this.parseIdFromUrl(value)
@@ -65,11 +74,29 @@ class Dashboard extends Component {
     })
   }
 
-  handleAddUserPlaylist(e) {
+  closeModals() {
     this.setState({
       playlistModalIsOpen: false,
-      editModalIsOpen: false
-    })
+      editModalIsOpen: false,
+      statsModalIsOpen: false
+    });
+  }
+
+  handleRefresh() {
+    const id = this.state.selectedPlaylist.id;
+    const playlistId = this.state.selectedPlaylist.playlist_id
+    this.props.refreshUserPlaylist(id, playlistId);
+    this.closeModals();
+  }
+
+  handleReset() {
+    const id = this.state.selectedPlaylist.id;
+    this.props.resetCompletedVideos(id);
+    this.closeModals();
+  }
+
+  handleAddUserPlaylist(e) {
+    this.closeModals();
     this.props.addUserPlaylist(e.target.id);
   }
 
@@ -89,28 +116,33 @@ class Dashboard extends Component {
   }
 
   handleDelete() {
-    this.props.deleteUserPlaylists(this.state.selectedPlaylist.id)
-    this.setState({
-      playlistModalIsOpen: false,
-      editModalIsOpen: false
-    })
+    this.props.deleteUserPlaylists(this.state.selectedPlaylist.id);
+    this.closeModals();
   }
 
   handleCloseModal(e) {
-    this.setState({
-      playlistModalIsOpen: false,
-      editModalIsOpen: false
-    })
+    this.closeModals();
   }
 
   handleCardButtonClick(e) {
     const target = e.target.innerText;
+    const id = parseInt(e.target.parentNode.id, 10)
+    const selectedPlaylist = this.props.playlists.playlists.find(p => p.id === id)
+
     if(target === "Edit") {
-      const selectedPlaylist = this.props.playlists.playlists.find(p => p.id === parseInt(e.target.id, 10))
       this.setState({
         editModalIsOpen: true,
         selectedPlaylist
       });
+    } else if (target === "Watch") {
+      this.context.router.history.replace(`/watch/${id}`);
+    } else if (target === "Stats") {
+      this.props.getPlaylistVideos(id).then(() => {
+        this.setState({
+          statsModalIsOpen: true,
+          selectedPlaylist
+        })
+      })
     }
   }
 
@@ -119,10 +151,10 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { currentUser } = this.props;
+    const { currentUser, videos } = this.props;
     const { playlists, isRequesting } = this.props.playlists
-    const { playlistModalIsOpen, editModalIsOpen, value, selectedPlaylist, errors } = this.state;
-    const { handleCloseModal, handleAddUserPlaylist, handleCardButtonClick, handleDelete } = this;
+    const { playlistModalIsOpen, editModalIsOpen, statsModalIsOpen, value, selectedPlaylist, errors } = this.state;
+    const { handleCloseModal, handleAddUserPlaylist, handleCardButtonClick, handleDelete, handleRefresh, handleReset } = this;
     return (
       <section className="section dashboard">
 
@@ -182,6 +214,21 @@ class Dashboard extends Component {
             onClick={handleCloseModal.bind(this)}
             playlist={selectedPlaylist}
             handleDelete={handleDelete.bind(this)}
+            handleRefresh={handleRefresh.bind(this)}
+            handleReset={handleReset.bind(this)}
+          />
+
+          :
+
+          null
+        }
+
+        { statsModalIsOpen && !isRequesting ?
+
+          <StatsModal
+            onClick={handleCloseModal.bind(this)}
+            playlist={selectedPlaylist}
+            videos={videos}
           />
 
           :
@@ -196,6 +243,8 @@ class Dashboard extends Component {
 export default connect(state => {
   return {
     currentUser: state.auth.currentUser,
-    playlists: state.playlists
+    playlists: state.playlists,
+    videos: state.videos.videos,
+    isRequesting: state.videos
   }
-}, { addUserPlaylist, getUserPlaylists, deleteUserPlaylists })(Dashboard);
+}, { addUserPlaylist, getUserPlaylists, deleteUserPlaylists, getPlaylistVideos, refreshUserPlaylist, resetCompletedVideos })(Dashboard);
