@@ -1,0 +1,22 @@
+.panel {
+  margin: auto;
+  width: 100%;
+}
+
+#video-blocks {
+  max-height: 440px;
+  overflow-y: scroll;
+  border-bottom: 2px solid #ccc;
+}
+
+.panel-icon .is-active {
+  color: #ffdd57;
+}
+
+.fa-circle {
+  color: #ccc
+}
+
+.complete {
+  color: #05c305;
+}
