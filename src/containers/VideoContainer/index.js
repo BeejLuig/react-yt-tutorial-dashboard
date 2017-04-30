@@ -42,7 +42,7 @@ class VideoContainer extends Component {
 
   render() {
 
-    const { videos, playlists, activeVideo, playlistIsRequesting, videoIsRequesting } = this.props;
+    const { playlists, activeVideo, playlistIsRequesting, videoIsRequesting } = this.props;
     const playlist = playlists.find(playlist => playlist.id === activeVideo.playlist_id)
 
     return (
@@ -58,7 +58,6 @@ class VideoContainer extends Component {
             :
             <PlaylistPanel
               onClick={this.handleClick.bind(this)}
-              videoIsRequesting={videoIsRequesting}
               handleComplete={this.handleComplete.bind(this)}
             />
           }
@@ -72,7 +71,6 @@ class VideoContainer extends Component {
 export default connect(
   state => ({
     playlists: state.playlists.playlists,
-    videos: state.videos.videos,
     activeVideo: state.videos.activeVideo,
     playlistIsRequesting: state.playlists.isRequesting,
     videoIsRequesting: state.playlists.isRequesting

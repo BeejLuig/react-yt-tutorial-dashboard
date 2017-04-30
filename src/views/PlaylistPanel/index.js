@@ -6,7 +6,7 @@ class PlaylistPanel extends Component {
 
   render() {
 
-    const { videos, onClick, handleComplete, videoIsRequesting } = this.props;
+    const { videos, onClick, handleComplete } = this.props;
 
     const panelBlocks = videos ? (
       videos.map((video, index) => {
