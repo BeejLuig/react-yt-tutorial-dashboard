@@ -1,3 +1,27 @@
+# YT Tutorial Dashboard - Client App
+
+This application is a front end demo using React/Redux. It works locally in conjunction with the [YT Tutorial Dashboard API](https://github.com/BeejLuig/yt-tutorial-dashboard). 
+
+In order to use this application, you will need a [YouTube API key](https://developers.google.com/youtube/v3/getting-started). 
+
+## Installation
+
+This project uses the [Yarn package manager](https://yarnpkg.com/en/). You can also use npm. 
+
+- Fork and clone this repository
+- Rename this repository's root directory to "client"
+- Fork and clone the [YT Tutorial Dashboard API](https://github.com/BeejLuig/yt-tutorial-dashboard) repository.
+- Replace the "client/" directory in `yt-tutorial-dashboard-master` with this project.
+- Run `bundle install`. 
+- cd into `client` and run `yarn install` or `npm install`
+
+## Setup and running the App
+
+The API project uses [PostgreSQL](https://www.postgresql.org/) for a database. If you prefer sqlite, remove `pg` from the Gemfile and replace it with `sqlite3`, then run `bundle install`. 
+
+- To enable the database, cd into the root directory and run `rake db:create && rake db:migrate`.
+- To start the servers, run `rake start`.
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
