@@ -36,6 +36,9 @@ export default {
       headers: headers(),
     })
     .then(parseResponse)
+    .catch(errors => {
+      console.log(errors)
+    })
   },
 
   post(url, data = {}) {
