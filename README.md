@@ -19,6 +19,7 @@ This project uses the [Yarn package manager](https://yarnpkg.com/en/). You can a
 
 The API project uses [PostgreSQL](https://www.postgresql.org/) for a database. If you prefer sqlite, remove `pg` from the Gemfile and replace it with `sqlite3`, then run `bundle install`. 
 
+- Put your YouTube API key in `client/src/config/env_demo.js`, then rename the file to `env.js`
 - To enable the database, cd into the root directory and run `rake db:create && rake db:migrate`.
 - To start the servers, run `rake start`.
 
