@@ -41,6 +41,13 @@ export const deletePlaylist = (playlistId) => {
   }
 }
 
+export const resetPlaylistVideos = (playlistId) => {
+  return {
+    type: 'RESET_PLAYLIST_VIDEOS_SUCCESS',
+    playlistId
+  }
+}
+
 // async actions
 
 export const addUserPlaylist = (id) => {
@@ -63,7 +70,7 @@ export const addUserPlaylist = (id) => {
             newPlaylist.videos_attributes = result.items.map(video => {
               return {
                  title: video.snippet.title,
-                 video_id: video.id,
+                 video_id: video.snippet.resourceId.videoId,
                  description: video.snippet.description,
                  thumbnail_url: video.snippet.thumbnails.default.url
                }
@@ -101,6 +108,45 @@ export const addUserPlaylist = (id) => {
       });
     }
   }
+
+  export const refreshUserPlaylist = (id, playlistId) => {
+    return dispatch => {
+      dispatch(playlistsRequest());
+      return getPlaylists(playlistId).then(result => {
+        if(result.errors) {
+          console.log(result.errors)
+          } else {
+            const playlist = result.items[0];
+            const newPlaylist = {
+              title: playlist.snippet.title,
+              playlist_id: playlist.id,
+              description: playlist.snippet.description,
+              thumbnail_url: playlist.snippet.thumbnails.default.url,
+              channel_title: playlist.snippet.channelTitle
+            }
+
+            return getPlaylistVideos(playlistId).then(result => {
+              newPlaylist.videos_attributes = result.items.map(video => {
+                return {
+                   title: video.snippet.title,
+                   video_id: video.snippet.resourceId.videoId,
+                   description: video.snippet.description,
+                   thumbnail_url: video.snippet.thumbnails.default.url
+                 }
+              })
+            }).then(() => {
+              return ApiService.patch(`/playlists/${id}`, { playlist: newPlaylist }).then(playlist => {
+                console.log(playlist)
+                dispatch(refreshPlaylist(playlist));
+                alert("Successfully refreshed playlist")
+              }).catch(errors => {
+                console.log(errors)
+              });
+            });
+          }
+        })
+      }
+    };
 
 //playlist: {
 //   title: "",
