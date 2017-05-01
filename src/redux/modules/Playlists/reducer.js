@@ -48,7 +48,6 @@ export default (state = initialState, action) => {
     case 'RESET_PLAYLIST_VIDEOS_SUCCESS':
       const playlist = state.playlists.find(playlist => playlist.id === action.playlistId);
       const playlistIndex = state.playlists.findIndex(p => p.id === playlist.id);
-      debugger
       return {
         isRequesting: false,
         playlists: [

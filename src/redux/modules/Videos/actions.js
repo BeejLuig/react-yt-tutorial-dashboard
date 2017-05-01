@@ -85,19 +85,34 @@ export const switchActiveVideos = (newId) => {
 export const completeVideo = (id) => {
   return (dispatch, getState) => {
     dispatch(playlistVideosRequest());
-    ApiService.post(`/videos/${id}/complete`)
-    .then(video => {
-      dispatch(completeActiveVideo(video));
-      const nextVideoId = video.id + 1;
-      return ApiService.post(`/videos/${nextVideoId}/activate`)
-      .then(video => {
-        dispatch(setActiveVideo(video))
+    const videos = getState().videos.videos;
+    const index = videos.findIndex(vid => vid.id === id);
+
+    if(index === (videos.length - 1)){
+      ApiService.post(`/videos/${id}/complete`)
+        .then(video => {
+          dispatch(completeActiveVideo(video));
+          return window.location = "/dashboard"
+        })
+      .catch(errors => {
+        console.log(errors);
+        dispatch(playlistVideosFailure(errors));
+      });
+    } else {
+      ApiService.post(`/videos/${id}/complete`)
+        .then(video => {
+          dispatch(completeActiveVideo(video));
+          const nextVideoId = video.id + 1;
+          return ApiService.post(`/videos/${nextVideoId}/activate`)
+        .then(video => {
+          dispatch(setActiveVideo(video))
+        })
       })
-    })
-    .catch(errors => {
-      console.log(errors);
-      dispatch(playlistVideosFailure(errors));
-    });
+      .catch(errors => {
+        console.log(errors);
+        dispatch(playlistVideosFailure(errors));
+      });
+    }
   }
 }
 

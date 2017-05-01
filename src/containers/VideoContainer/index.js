@@ -72,6 +72,7 @@ export default connect(
   state => ({
     playlists: state.playlists.playlists,
     activeVideo: state.videos.activeVideo,
+    videos: state.videos.videos,
     playlistIsRequesting: state.playlists.isRequesting,
     videoIsRequesting: state.playlists.isRequesting
   }), { getPlaylistVideos, getUserPlaylists, switchActiveVideos, completeVideo }
