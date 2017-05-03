@@ -1,4 +1,4 @@
-import { API_KEY } from '../config/env.js';
+const API_KEY = process.env.REACT_APP_YT_API_KEY
 
 export function getPlaylistVideos(playlistId) {
 

@@ -1,5 +1,7 @@
 import fetch from 'isomorphic-fetch';
 
+const BASE_URL = process.env.REACT_APP_API_URL
+
 export const headers = () => {
 
   const token = JSON.parse(localStorage.getItem('token'));
@@ -31,7 +33,7 @@ export const queryString = (params) => {
 export default {
 
   get(url, params = {}) {
-    return fetch(`${url}${queryString(params)}`, {
+    return fetch(`${BASE_URL}${url}${queryString(params)}`, {
       method: 'GET',
       headers: headers(),
     })
@@ -43,7 +45,7 @@ export default {
 
   post(url, data = {}) {
     const body = JSON.stringify(data);
-    return fetch(`${url}`, {
+    return fetch(`${BASE_URL}${url}`, {
       method: 'POST',
       headers: headers(),
       body,
@@ -54,7 +56,7 @@ export default {
   patch(url, data) {
     const body = JSON.stringify(data);
 
-    return fetch(`${url}`, {
+    return fetch(`${BASE_URL}${url}`, {
       method: 'PATCH',
       headers: headers(),
       body,
@@ -63,7 +65,7 @@ export default {
   },
 
   delete(url) {
-    return fetch(`${url}`, {
+    return fetch(`${BASE_URL}${url}`, {
       method: 'DELETE',
       headers: headers(),
     })
