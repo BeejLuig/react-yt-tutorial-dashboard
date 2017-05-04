@@ -1,8 +1,6 @@
 import fetch from 'isomorphic-fetch';
 
 const BASE_URL = process.env.REACT_APP_API_URL
-console.log(process.env)
-console.log(BASE_URL)
 
 export const headers = () => {
 
