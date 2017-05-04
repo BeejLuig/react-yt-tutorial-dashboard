@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 
-const BASE_URL = process.env.REACT_APP_API_URL
+const BASE_URL = REACT_APP_API_URL
 
 export const headers = () => {
 
@@ -9,7 +9,7 @@ export const headers = () => {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
     'Authorization': `Bearer: ${token}`,
-    'Access-Control-Allow-Origin': 'http://localhost:3000/'
+    'Access-Control-Allow-Origin': 'https://yttd.herokuapp.com/'
   }
 }
 
