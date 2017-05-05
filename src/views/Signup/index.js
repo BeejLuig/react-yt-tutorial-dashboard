@@ -26,10 +26,10 @@ class Signup extends Component {
           </div>
           <br />
           <SignupForm onSubmit={this.handleSignup} />
+          <br />
+          <p><b>Already have an account?</b></p>
+          <NavLink to="/login">Log in</NavLink>
         </div>
-        <br />
-        <p><b>Already have an account?</b></p>
-        <NavLink to="/login">Log in</NavLink>
       </section>
     )
   }

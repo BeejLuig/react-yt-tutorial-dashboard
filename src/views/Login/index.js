@@ -29,7 +29,7 @@ class Login extends Component {
           <br />
           <LoginForm onSubmit={this.handleLogin} />
           <br />
-          <p><b>Don't have an account?</b></p>
+          <p><b>Need an account?</b></p>
           <NavLink to="/signup">Sign up</NavLink>
         </div>
       </section>
