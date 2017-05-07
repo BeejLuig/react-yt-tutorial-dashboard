@@ -1,6 +1,6 @@
 # YT Tutorial Dashboard - Client App
 
-This application is a front end demo using React/Redux. It works locally in conjunction with the [YT Tutorial Dashboard API](https://github.com/BeejLuig/yt-tutorial-dashboard). 
+This application is a front end demo using React/Redux. It works locally in conjunction with the [YT Tutorial Dashboard API](https://github.com/BeejLuig/yt-tutorial-dashboard). See the deployed version [here](https://yttd.herokuapp.com/)
 
 In order to use this application, you will need a [YouTube API key](https://developers.google.com/youtube/v3/getting-started). 
 
