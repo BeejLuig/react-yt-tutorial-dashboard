@@ -52,7 +52,7 @@ export default function Card(props) {
                 <p className="subtitle view-progress">{completed_videos}/{total_videos} Complete</p>
               </div>
             </div>
-            <p>{!!description ? description : "No description available"}</p>
+            <pre>{!!description ? description : "No description available"}</pre>
           </div>
           <footer className="card-footer" id={id}>
             <a onClick={onClick} className="card-footer-item">Watch</a>

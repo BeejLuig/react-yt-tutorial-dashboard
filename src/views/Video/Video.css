@@ -1,0 +1,8 @@
+pre.content {
+    background-color: inherit;
+    color: inherit;
+    font-size: 0.95em;
+    white-space: pre-wrap;
+    font-family: inherit;
+    word-wrap: inherit;
+}

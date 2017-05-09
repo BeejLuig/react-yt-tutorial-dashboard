@@ -22,3 +22,12 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+pre {
+    background-color: none;
+    color: inherit;
+    font-size: inherit;
+    white-space: pre-wrap;
+    font-family: inherit;
+    word-wrap: inherit;
+}

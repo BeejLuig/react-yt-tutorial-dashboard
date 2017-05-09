@@ -1,5 +1,6 @@
 import React from 'react';
 import YouTube from 'react-youtube';
+import './Video.css';
 
 const Video = (props) => {
 
@@ -36,9 +37,9 @@ const Video = (props) => {
       <footer id="video-footer">
         <div className="section">
           <p className="header"><b>Description</b></p>
-          <p className="content">
+          <pre className="content">
             { description }
-          </p>
+          </pre>
         </div>
       </footer>
 
